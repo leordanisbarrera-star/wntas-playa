@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Ventas Playa | Laptops, Electrodomésticos y Motos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            color: #1e2a3e;
+            line-height: 1.5;
+        }
+
+        /* HEADER */
+        .main-header {
+            background: #0b2b40;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            letter-spacing: -0.5px;
+        }
+        .logo span {
+            font-weight: normal;
+            color: #f39c12;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .nav-menu button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.4rem 0;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-menu button:hover, .nav-menu button.active-filter {
+            border-bottom-color: #f39c12;
+            color: #f39c12;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.8rem;
+            background: #1e4a62;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cart-count {
+            background: #f39c12;
+            color: #0b2b40;
+            font-weight: bold;
+            border-radius: 30px;
+            padding: 0 0.5rem;
+            font-size: 1rem;
+            min-width: 28px;
+            text-align: center;
+        }
+
+        /* BANNER */
+        .hero {
+            background: linear-gradient(135deg, #0a2f44 0%, #1c5a7a 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+        }
+        .hero h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .availability-info {
+            background: rgba(0,0,0,0.3);
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* LAYOUT PRINCIPAL: productos + carrito lateral */
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 2rem;
+        }
+
+        /* SECCIÓN PRODUCTOS */
+        .products-section h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            border-left: 6px solid #f39c12;
+            padding-left: 1rem;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: #eef2f5;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1e2a3e;
+        }
+        .filter-btn.active {
+            background: #f39c12;
+            color: #0b2b40;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .filter-btn:hover {
+            background: #d4dfe6;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+        .card-img {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            background: #e2e8f0;
+        }
+        .card-content {
+            padding: 1rem 1.2rem 1.2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .card-description {
+            font-size: 0.85rem;
+            color: #4a5568;
+            margin: 0.4rem 0;
+            line-height: 1.4;
+        }
+        .card-price {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #f39c12;
+            margin: 0.5rem 0;
+        }
+        .add-to-cart {
+            background: #0b2b40;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: auto;
+        }
+        .add-to-cart:hover {
+            background: #f39c12;
+            color: #0b2b40;
+        }
+
+        /* CARRITO LATERAL */
+        .cart-sidebar {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            padding: 1.2rem;
+            position: sticky;
+            top: 90px;
+            height: fit-content;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .cart-sidebar h3 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cart-items {
+            margin: 1rem 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .cart-item {
+            display: flex;
+            gap: 0.8rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #edf2f7;
+            align-items: center;
+        }
+        .cart-item-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #e2e8f0;
+        }
+        .cart-item-info {
+            flex: 1;
+        }
+        .cart-item-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .cart-item-price {
+            font-size: 0.8rem;
+            color: #f39c12;
+            font-weight: bold;
+        }
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .cart-item-qty button {
+            background: #eef2f5;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: #c00;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        .cart-total {
+            font-weight: 800;
+            font-size: 1.3rem;
+            text-align: right;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .checkout-btn {
+            background: #2c7a4a;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 40px;
+            font-weight: bold;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .checkout-btn:hover {
+            background: #1f5e38;
+        }
+        .empty-cart {
+            text-align: center;
+            color: #6c757d;
+            padding: 1rem;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #0b2b40;
+            color: #cddfe7;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        footer a {
+            color: #f39c12;
+            text-decoration: none;
+        }
+        .whatsapp-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #25D366;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            margin-top: 0.5rem;
+            transition: 0.2s;
+        }
+        .whatsapp-link:hover {
+            background: #128C7E;
+            color: white;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 850px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .cart-sidebar {
+                position: static;
+                max-height: none;
+            }
+            .main-header {
+                flex-direction: column;
+                gap: 0.8rem;
+                text-align: center;
+            }
+            .cart-icon {
+                align-self: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="main-header" id="mainHeader">
+    <div class="logo">
+        <h1>⚡ <span id="storeName"></span></h1>
+    </div>
+    <div class="nav-menu">
+        <button class="filter-option" data-filter="all" id="filterAll">🏠 Inicio</button>
+        <button class="filter-option" data-filter="laptop">💻 Laptops</button>
+        <button class="filter-option" data-filter="electro">🔌 Electrodomésticos</button>
+        <button class="filter-option" data-filter="moto">🏍️ Motos</button>
+    </div>
+    <div class="cart-icon">
+        🛒 <span class="cart-count" id="cartCount">0</span>
+    </div>
+</header>
+
+<section class="hero">
+    <h2 id="heroTitle">Ventas Playa</h2>
+    <p id="heroSubtitle">Laptops, electrodomésticos y motos | Confianza y calidad</p>
+    <div class="availability-info" id="availabilityInfo"></div>
+</section>
+
+<div class="main-container">
+    <div class="products-section">
+        <h3>🔥 Productos destacados</h3>
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="laptop">Laptops</button>
+            <button class="filter-btn" data-filter="electro">Electrodomésticos</button>
+            <button class="filter-btn" data-filter="moto">Motos</button>
+        </div>
+        <div class="products-grid" id="productsGrid">
+            <!-- Productos generados dinámicamente desde JS -->
+        </div>
+    </div>
+
+    <aside class="cart-sidebar">
+        <h3>🛍️ Mi carrito</h3>
+        <div id="cartItemsContainer" class="cart-items">
+            <div class="empty-cart">🛒 El carrito está vacío</div>
+        </div>
+        <div class="cart-total" id="cartTotal">Total: $0</div>
+        <button class="checkout-btn" id="checkoutBtn">✅ Finalizar compra</button>
+    </aside>
+</div>
+
+<footer>
+    <p id="contactPhone"></p>
+    <p id="contactEmail">✉️ ventas@ventasplaya.com</p>
+    <p id="contactAddress">📍 Playa, La Habana, Cuba</p>
+    <a id="whatsappLink" href="#" target="_blank" class="whatsapp-link">📱 Únete a nuestro grupo de WhatsApp</a>
+    <p id="footerRights">© 2026 Ventas Playa - Todos los derechos reservados</p>
+</footer>
+
+<script>
+    // ============================================================
+    // CONFIGURACIÓN DEL MODERADOR (EDITA AQUÍ LO QUE QUIERAS)
+    // ============================================================
+    const config = {
+        nombreTienda: "Ventas Playa",
+        telefono: "+53 58966446",
+        email: "ventas@ventasplaya.com",
+        direccion: "Playa, La Habana, Cuba",
+        whatsappLink: "https://chat.whatsapp.com/EjemploLinkGrupo",  // CAMBIA POR TU ENLACE REAL
+        infoDisponibilidad: "✅ Todos los productos disponibles | Entrega en 24-48h | Aceptamos transferencia y efectivo",
+        heroTitulo: "Ventas Playa",
+        heroSubtitulo: "Laptops, electrodomésticos y motos | Confianza y calidad"
+    };
+
+    // ============================================================
+    // LISTA DE PRODUCTOS (AÑADE, ELIMINA O MODIFICA LIBREMENTE)
+    // Cada producto tiene: id, nombre, categoria, precio, imagen, descripcion
+    // ============================================================
+    const productosData = [
+        // Laptops
+        { 
+            id: "laptop1", 
+            nombre: "Lenovo ThinkPad X1", 
+            categoria: "laptop", 
+            precio: 850, 
+            imagen: "https://picsum.photos/seed/thinkpad/200/150",
+            descripcion: "Intel Core i7, 16GB RAM, SSD 512GB, ideal para trabajo y diseño."
+        },
+        { 
+            id: "laptop2", 
+            nombre: "MacBook Air M2", 
+            categoria: "laptop", 
+            precio: 1200, 
+            imagen: "https://picsum.photos/seed/macbook/200/150",
+            descripcion: "Chip M2, 8GB RAM, 256GB SSD, batería todo el día, ultradelgada."
+        },
+        // Electrodomésticos
+        { 
+            id: "electro1", 
+            nombre: "Lavadora Samsung 16kg", 
+            categoria: "electro", 
+            precio: 600, 
+            imagen: "https://picsum.photos/seed/lavadora/200/150",
+            descripcion: "Carga frontal, eficiencia A+, control inteligente, 16kg."
+        },
+        { 
+            id: "electro2", 
+            nombre: "Microondas LG Intello", 
+            categoria: "electro", 
+            precio: 150, 
+            imagen: "https://picsum.photos/seed/microondas/200/150",
+            descripcion: "30L, panel digital, descongelado rápido, acero inoxidable."
+        },
+        // Motos
+        { 
+            id: "moto1", 
+            nombre: "Honda CB 190R", 
+            categoria: "moto", 
+            precio: 3500, 
+            imagen: "https://picsum.photos/seed/honda190/200/150",
+            descripcion: "190cc, frenos ABS, diseño deportivo, ideal para ciudad."
+        },
+        { 
+            id: "moto2", 
+            nombre: "Yamaha FZ 16", 
+            categoria: "moto", 
+            precio: 2800, 
+            imagen: "https://picsum.photos/seed/yamaha/200/150",
+            descripcion: "153cc, torque excelente, economía de combustible, robusta."
+        }
+    ];
+
+    // ============================================================
+    // FIN DE LA ZONA EDITABLE POR EL MODERADOR
+    // ============================================================
+
+    // Aplicar configuración al DOM
+    document.getElementById('storeName').innerText = config.nombreTienda;
+    document.getElementById('heroTitle').innerText = config.heroTitulo;
+    document.getElementById('heroSubtitle').innerText = config.heroSubtitulo;
+    document.getElementById('availabilityInfo').innerHTML = config.infoDisponibilidad;
+    document.getElementById('contactPhone').innerHTML = `📞 ${config.telefono}`;
+    document.getElementById('contactEmail').innerHTML = `✉️ ${config.email}`;
+    document.getElementById('contactAddress').innerHTML = `📍 ${config.direccion}`;
+    const whatsappLink = document.getElementById('whatsappLink');
+    whatsappLink.href = config.whatsappLink;
+    whatsappLink.target = "_blank";
+    document.getElementById('footerRights').innerHTML = `© 2026 ${config.nombreTienda} - Todos los derechos reservados`;
+
+    // Variables del carrito
+    let cart = [];
+
+    function saveCartToStorage() {
+        localStorage.setItem('ventasPlayaCart', JSON.stringify(cart));
+    }
+
+    function loadCartFromStorage() {
+        const stored = localStorage.getItem('ventasPlayaCart');
+        if (stored) {
+            try {
+                cart = JSON.parse(stored);
+                cart = cart.filter(item => item.quantity > 0);
+            } catch(e) { cart = []; }
+        } else {
+            cart = [];
+        }
+        renderCart();
+    }
+
+    function addToCart(productId, productName, productPrice, productImg) {
+        const priceNum = parseFloat(productPrice);
+        const existing = cart.find(item => item.id === productId);
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({
+                id: productId,
+                name: productName,
+                price: priceNum,
+                quantity: 1,
+                img: productImg
+            });
+        }
+        renderCart();
+        saveCartToStorage();
+    }
+
+    function updateQuantity(itemId, delta) {
+        const index = cart.findIndex(item => item.id === itemId);
+        if (index !== -1) {
+            const newQty = cart[index].quantity + delta;
+            if (newQty <= 0) {
+                cart.splice(index, 1);
+            } else {
+                cart[index].quantity = newQty;
+            }
+            renderCart();
+            saveCartToStorage();
+        }
+    }
+
+    function removeItem(itemId) {
+        cart = cart.filter(item => item.id !== itemId);
+        renderCart();
+        saveCartToStorage();
+    }
+
+    function formatPrice(price) {
+        return price.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    function renderCart() {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById('cartCount').innerText = totalItems;
+        const cartContainer = document.getElementById('cartItemsContainer');
+        const cartTotalSpan = document.getElementById('cartTotal');
+
+        if (cart.length === 0) {
+            cartContainer.innerHTML = `<div class="empty-cart">🛒 El carrito está vacío</div>`;
+            cartTotalSpan.innerText = `Total: $0`;
+            return;
+        }
+
+        let cartHtml = '';
+        let total = 0;
+        cart.forEach(item => {
+            const subtotal = item.price * item.quantity;
+            total += subtotal;
+            cartHtml += `
+                <div class="cart-item">
+                    <img class="cart-item-img" src="${item.img}" alt="${item.name}" onerror="this.src='https://picsum.photos/seed/fallback/50/50'">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">${formatPrice(item.price)}</div>
+                        <div class="cart-item-qty">
+                            <button class="qty-decr" data-id="${item.id}">−</button>
+                            <span>${item.quantity}</span>
+                            <button class="qty-incr" data-id="${item.id}">+</button>
+                            <button class="cart-item-remove" data-id="${item.id}" title="Eliminar">🗑️</button>
+                        </div>
+                    </div>
+                    <div><strong>${formatPrice(subtotal)}</strong></div>
+                </div>
+            `;
+        });
+        cartContainer.innerHTML = cartHtml;
+        cartTotalSpan.innerText = `Total: ${formatPrice(total)}`;
+
+        document.querySelectorAll('.qty-decr').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = btn.getAttribute('data-id');
+                updateQuantity(id, -1);
+            });
+        });
+        document.querySelectorAll('.qty-incr').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = btn.getAttribute('data-id');
+                updateQuantity(id, 1);
+            });
+        });
+        document.querySelectorAll('.cart-item-remove').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = btn.getAttribute('data-id');
+                removeItem(id);
+            });
+        });
+    }
+
+    // Generar productos desde el array incluyendo la descripción
+    function generateProducts() {
+        const grid = document.getElementById('productsGrid');
+        grid.innerHTML = '';
+        productosData.forEach(prod => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('data-category', prod.categoria);
+            card.setAttribute('data-id', prod.id);
+            card.setAttribute('data-name', prod.nombre);
+            card.setAttribute('data-price', prod.precio);
+            card.innerHTML = `
+                <img class="card-img" src="${prod.imagen}" alt="${prod.nombre}" loading="lazy">
+                <div class="card-content">
+                    <div class="card-title">${prod.nombre}</div>
+                    <div class="card-description">${prod.descripcion || ''}</div>
+                    <div class="card-price">${formatPrice(prod.precio)}</div>
+                    <button class="add-to-cart">➕ Agregar al carrito</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+        // Re-asignar eventos a los botones
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const card = e.target.closest('.card');
+                if (!card) return;
+                const id = card.getAttribute('data-id');
+                const name = card.getAttribute('data-name');
+                const price = card.getAttribute('data-price');
+                const img = card.querySelector('.card-img').src;
+                addToCart(id, name, price, img);
+                const originalText = e.target.innerText;
+                e.target.innerText = '✓ Agregado!';
+                setTimeout(() => {
+                    e.target.innerText = originalText;
+                }, 800);
+            });
+        });
+    }
+
+    // Filtros
+    function filterProducts(category) {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            const cardCat = card.getAttribute('data-category');
+            if (category === 'all' || cardCat === category) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            const btnCat = btn.getAttribute('data-filter');
+            if ((category === 'all' && btnCat === 'all') || btnCat === category) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        document.querySelectorAll('.filter-option').forEach(btn => {
+            const btnCat = btn.getAttribute('data-filter');
+            if ((category === 'all' && btnCat === 'all') || btnCat === category) {
+                btn.classList.add('active-filter');
+            } else {
+                btn.classList.remove('active-filter');
+            }
+        });
+    }
+
+    // Eventos de filtros
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterProducts(btn.getAttribute('data-filter'));
+        });
+    });
+    document.querySelectorAll('.filter-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterProducts(btn.getAttribute('data-filter'));
+        });
+    });
+
+    // Checkout
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+        if (cart.length === 0) {
+            alert('🛒 Tu carrito está vacío. Agrega productos para continuar.');
+            return;
+        }
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        alert(`✅ ¡Compra simulada con éxito!\nTotal: ${formatPrice(total)}\nGracias por confiar en ${config.nombreTienda}.`);
+        cart = [];
+        renderCart();
+        saveCartToStorage();
+    });
+
+    // Inicializar
+    generateProducts();
+    loadCartFromStorage();
+    filterProducts('all');
+</script>
+</body>
+</html>
